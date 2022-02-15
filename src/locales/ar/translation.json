@@ -1,0 +1,50 @@
+{
+  "validation": {
+    "username": {
+      "null": "[ar] Username cannot be null",
+      "size": "[ar] Must have min 4 and max 32 characters"
+    },
+    "email": {
+      "null": "[ar] E-mail cannot be null",
+      "invalid": "[ar] E-mail is not valid",
+      "inuse": "[ar] E-mail in use"
+    },
+    "password": {
+      "null": "[ar] Password cannot be null",
+      "size": "[ar] Password must be at least 6 characters",
+      "pattern": "[ar] Password must have at least 1 uppercase, 1 lowercase letter and 1 number"
+    },
+    "image": {
+      "size": "[ar] Images cannot be bigger than {{size}}",
+      "type": "[ar] Only {{types}} files are allowed"
+    },
+    "file": {
+      "size": "[ar] Uploaded file cannot be bigger than {{size}}"
+    }
+  },
+  "common": {
+    "errors": {
+      "general": "[ar] Something went wrong",
+      "unauthorized": "[ar] Missing authentication"
+    }
+  },
+  "auth": {
+    "created": {
+      "success": "[ar] Account created successfully",
+      "failed": "[ar] Could not create account"
+    },
+    "deactived": {
+      "success": "[ar] Account deactivated"
+    },
+    "activated": {
+      "success": "[ar] Account is activated",
+      "failure": "[ar] This account is either active or invalid token"
+    },
+    "errors": {
+      "unknown": "[ar] User not found",
+      "auth": "[ar] Incorrect credentials",
+      "unauthorized-update": "[ar] You are not authorized to update user",
+      "unauthorized-delete": "[ar] You are not authorized to delete user"
+    }
+  }
+}

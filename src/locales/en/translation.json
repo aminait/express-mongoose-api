@@ -1,0 +1,50 @@
+{
+  "validation": {
+    "username": {
+      "null": "Username cannot be null",
+      "size": "Must have min 4 and max 32 characters"
+    },
+    "email": {
+      "null": "E-mail cannot be null",
+      "invalid": "E-mail is not valid",
+      "inuse": "E-mail in use"
+    },
+    "password": {
+      "null": "Password cannot be null",
+      "size": "Password must be at least 6 characters",
+      "pattern": "Password must have at least 1 uppercase, 1 lowercase letter and 1 number"
+    },
+    "image": {
+      "size": "Images cannot be bigger than {{size}}",
+      "type": "Only {{types}} files are allowed"
+    },
+    "file": {
+      "size": "Uploaded file cannot be bigger than {{size}}"
+    }
+  },
+  "common": {
+    "errors": {
+      "general": "Something went wrong",
+      "unauthorized": "Missing authentication"
+    }
+  },
+  "auth": {
+    "created": {
+      "success": "Account created successfully",
+      "failed": "Could not create account"
+    },
+    "deactived": {
+      "success": "Account deactivated"
+    },
+    "activated": {
+      "success": "Account is activated",
+      "failure": "This account is either active or invalid token"
+    },
+    "errors": {
+      "unknown": "User not found",
+      "auth": "Incorrect credentials",
+      "unauthorized-update": "You are not authorized to update user",
+      "unauthorized-delete": "You are not authorized to delete user"
+    }
+  }
+}
