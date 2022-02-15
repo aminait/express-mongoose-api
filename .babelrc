@@ -19,9 +19,8 @@
       "module-resolver",
       {
         "alias": {
-          "#routes": "./src/routes",
-          "#config": "./src/config",
-          "#app": "./src/app"
+          "@src": "./src",
+          "@api": "./src/api"
         }
       }
     ]

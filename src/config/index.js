@@ -9,4 +9,5 @@ if (result.error) {
 export default {
   port: process.env.PORT,
   dummy: "data",
+  frontendUrl: "https://localhost:3000",
 };
