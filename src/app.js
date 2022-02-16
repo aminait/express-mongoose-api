@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import middleware from "i18next-http-middleware";
@@ -46,10 +47,18 @@ const app = express();
 
 // TODO rate limiting, sentry
 app.use(middleware.handle(i18next));
+app.use(
+  session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(express.json({ limit: "3mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());
@@ -77,6 +86,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get("/health", (req, res) => {
   res.json({ message: "Healthy" });
 });
+
+// routes
 app.use("/api/v1", routes);
 
 app.set("env", process.env.NODE_ENV);

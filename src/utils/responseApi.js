@@ -1,16 +1,16 @@
-export function success(data = null, messages = null) {
+export function success({ data = null, messages = null, status = "OK" }) {
   return {
-    status: "OK",
-    errors: null,
+    status,
+    errors: [],
     messages,
     data,
   };
 }
 
-export function error(error, messages = null, status = "ERR") {
+export function error({ errors = [], messages = null, status = "ERR" }) {
   return {
     status,
-    errors: error,
+    errors,
     messages,
     data: null,
   };
