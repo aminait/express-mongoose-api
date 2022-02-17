@@ -16,8 +16,9 @@ export default {
     expiryDays: "10d",
   },
   email: {
-    apiKey: "SG-",
-    verifiedAccount: "amina@gazal.app",
+    apiKey:
+      "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",
+    verifiedAccount: "aminait@outlook.com",
     templates: {
       confirm: "templateId",
       passwordRevoery: "templateId",

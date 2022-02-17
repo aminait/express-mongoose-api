@@ -30,8 +30,8 @@
   },
   "auth": {
     "created": {
-      "success": "Account created successfully",
-      "failed": "Could not create account"
+      "success": "User created successfully",
+      "failed": "Could not create user"
     },
     "deactived": {
       "success": "Account deactivated"
@@ -45,6 +45,12 @@
       "auth": "Incorrect credentials",
       "unauthorized-update": "You are not authorized to update user",
       "unauthorized-delete": "You are not authorized to delete user"
+    }
+  },
+  "config": {
+    "email": {
+      "missing": "Missing email config",
+      "failure": "Could not send mail"
     }
   }
 }

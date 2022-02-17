@@ -12,12 +12,11 @@ import { Strategy } from "passport-local";
 // import Sentry from "@sentry/node";
 
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "../swagger.json";
 
-import packageJson from "../package.json";
-import User from "@src/models/user.js";
+import User from "@src/models/user";
 import config from "@src/config";
 import routes from "@src/routes";
+import swaggerDocument from "../swagger.json";
 // import routes
 
 // Locale initialization

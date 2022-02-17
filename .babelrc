@@ -1,17 +1,10 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "node": "current"
-      }
-    ]
-  ],
-
+  "presets": ["@babel/preset-env"],
   "plugins": [
     [
-      "transform-runtime",
+      "@babel/plugin-transform-runtime",
       {
+        "corejs": 2,
         "regenerator": true
       }
     ],
@@ -20,7 +13,9 @@
       {
         "alias": {
           "@src": "./src",
-          "@api": "./src/api"
+          "@api": "./src/api",
+          "@models": "./src/models",
+          "@locales": "./src/locales"
         }
       }
     ]

@@ -13,8 +13,8 @@ export const login = async (req, res) => {
         error({ status: "NOT_FOUND", errors: ["Email is not registered"] })
       );
   }
-  passport.authenticate("local", function (server_err, user, info) {
-    if (server_err) {
+  passport.authenticate("local", (serverErr, user) => {
+    if (serverErr) {
       return res.status(500).json(error());
     }
 
@@ -22,7 +22,7 @@ export const login = async (req, res) => {
       return res.status(401).json(error({ errors: ["Invalid credentials"] }));
     }
 
-    req.logIn(user, function (err) {
+    req.logIn(user, (err) => {
       console.log("user", user);
       if (err) {
         return res.status(500).json(error());
@@ -44,26 +44,38 @@ export const logout = async (req, res) => {
 export const register = async (req, res) => {
   const { email, password } = req.body;
 
+  const missingParams = [];
+  if (!email) {
+    missingParams.push({ email: "Email required" });
+  }
+  if (!password) {
+    missingParams.push({ password: "Password required" });
+  }
+
+  if (missingParams.length > 0) {
+    return res.status(400).json(validation(missingParams));
+  }
+
   const existingUser = await User.findOne({ email });
   console.log("register -> existingUser", existingUser);
 
+  console.log("register -> missingParams", missingParams);
   if (existingUser) {
     return res
       .status(400)
-      .json(validation({ email: "Email already registered" }));
+      .json(validation([{ email: "Email already registered" }]));
   }
   const userToCreate = new User({
     username: email,
     email,
   });
 
-  User.register(userToCreate, password, function (err, user) {
+  User.register(userToCreate, password, (err) => {
     if (err) {
       return res
         .status(500)
         .json(error({ errors: ["Account could not be created"] }));
-    } else {
-      return res.status(201).json(success({ status: "CREATED" }));
     }
+    return res.status(201).json(success({ status: "CREATED" }));
   });
 };

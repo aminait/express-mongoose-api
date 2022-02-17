@@ -1,0 +1,25 @@
+{
+  "parser": "@babel/eslint-parser",
+  "extends": ["airbnb-base", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "requireConfigFile": false
+  },
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": { "babel-module": {} }
+  },
+  "rules": {
+    "no-console": "off",
+    "no-param-reassign": "off",
+    "consistent-return": "off"
+  },
+  "plugins": [
+    // ...
+    "import",
+    "jest"
+  ]
+}
