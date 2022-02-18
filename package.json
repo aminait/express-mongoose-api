@@ -2,12 +2,18 @@
   "name": "volunteer-network-api",
   "version": "1.0",
   "description": "Volunteer Network REST API",
-  "main": "index.js",
+  "main": "build",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon -w src --exec \"babel-node index.js --presets=@babel/preset-env\"",
-    "build": "rimraf build && babel index.js -s -D -d build --presets env",
-    "test": "jest",
-    "lint": "eslint --fix"
+    "build": "rimraf build && cross-env NODE_ENV=production babel index.js -s -D -d build --presets=@babel/preset-env",
+    "test": "cross-env NODE_ENV=development jest",
+    "test:staged": "cross-env CI=true jest",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write src",
+    "start": "cross-env NODE_ENV=production pm2 start build -n volunteer-api",
+    "docker:build": "docker build -t volunteer/api .",
+    "docker:run": "docker run -d --rm -p 3005:3005 --name api_standalone volunteer/server"
   },
   "repository": {
     "type": "git",
@@ -15,7 +21,13 @@
   },
   "keywords": [
     "nodejs",
-    "expressjs"
+    "expressjs",
+    "mongoose",
+    "mern",
+    "tdd",
+    "jest",
+    "docker",
+    "gce"
   ],
   "author": "Amina Ait",
   "license": "ISC",
@@ -39,6 +51,7 @@
     "debug": "^4.3.3",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
+    "express-rate-limit": "^6.2.1",
     "express-session": "^1.17.2",
     "helmet": "^5.0.2",
     "http-errors": "^2.0.0",
@@ -68,7 +81,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.4.2",
     "babel-plugin-module-resolver": "^4.1.0",
-    "eslint": "^8.2.0",
+    "eslint": "^8.9.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-babel-module": "^5.3.1",

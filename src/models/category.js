@@ -1,7 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const CategorySchema = mongoose.Schema({
-  parentCategoryId: { type: Schema.Types.ObjectId, ref: "Category" },
+const { Schema } = mongoose;
+
+const CategorySchema = Schema({
+  parentCategoryId: { type: Schema.Types.ObjectId, ref: 'Category' },
   name: {
     type: String,
   },
@@ -10,4 +12,4 @@ const CategorySchema = mongoose.Schema({
   },
 });
 
-export default mongoose.model("Category", CategorySchema);
+export default mongoose.model('Category', CategorySchema);

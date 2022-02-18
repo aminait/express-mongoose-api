@@ -1,9 +1,11 @@
-import mongoose from "mongoose";
-import projectStatus from "./projectStatus";
+import mongoose from 'mongoose';
+import projectStatus from './projectStatus';
 
-const ProjectSchema = mongoose.Schema(
+const { Schema } = mongoose;
+
+const ProjectSchema = Schema(
   {
-    organizer: { type: Schema.Types.ObjectId, ref: "Organization" },
+    organizer: { type: Schema.Types.ObjectId, ref: 'Organization' },
     name: {
       type: String,
       required: true,
@@ -62,4 +64,4 @@ const ProjectSchema = mongoose.Schema(
 
 // ProjectSchema.method("calculatePrice", async () => {});
 
-export default mongoose.model("Project", ProjectSchema);
+export default mongoose.model('Project', ProjectSchema);

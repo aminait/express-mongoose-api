@@ -1,6 +1,13 @@
-import jwt from "jsonwebtoken";
-import config from "@src/config";
-import { sendEmail } from "@src/utils/email/sendEmail";
+import jwt from 'jsonwebtoken';
+import config from '@src/config';
+import sendEmail from '@src/utils/email/sendEmail';
+
+export const generatePin = () => {
+  const min = 1000;
+  const max = 9999;
+  const otp = Math.random() * (max - min) + min;
+  return Math.trunc(otp).toString();
+};
 
 export const sendConfirmationEmail = async (email) => {
   const pin = generatePin();
@@ -18,19 +25,10 @@ export const sendConfirmationEmail = async (email) => {
   await sendEmail(mailData);
 };
 
-export const generatePin = (digits = 4) => {
-  const min = 1000;
-  const max = 9999;
-  let otp = Math.random() * (max - min) + min;
-  return Math.trunc(otp).toString();
-};
-
 export const generateJwtToken = (user) => {
-  const token = jwt.sign(
-    { userId: user._id, username: user.username },
-    config.jwt.secret,
-    { expiresIn: config.jwt.expiryDays }
-  );
+  const token = jwt.sign({ userId: user._id, username: user.username }, config.jwt.secret, {
+    expiresIn: config.jwt.expiryDays,
+  });
 
   return token;
 };

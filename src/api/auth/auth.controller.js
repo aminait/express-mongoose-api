@@ -1,7 +1,7 @@
-import passport from "passport";
-import User from "@src/models/user";
-import { error, success, validation } from "@src/utils/responseApi";
-import { generateJwtToken } from "./auth.service";
+import passport from 'passport';
+import User from '@src/models/user';
+import { error, success, validation } from '@src/utils/responseApi';
+import { generateJwtToken } from './auth.service';
 
 export const login = async (req, res) => {
   const existingUser = await User.findOne({ email: req.body.email });
@@ -9,21 +9,18 @@ export const login = async (req, res) => {
   if (!existingUser) {
     return res
       .status(404)
-      .json(
-        error({ status: "NOT_FOUND", errors: ["Email is not registered"] })
-      );
+      .json(error({ status: 'NOT_FOUND', errors: ['Email is not registered'] }));
   }
-  passport.authenticate("local", (serverErr, user) => {
+  passport.authenticate('local', (serverErr, user) => {
     if (serverErr) {
       return res.status(500).json(error());
     }
 
     if (!user) {
-      return res.status(401).json(error({ errors: ["Invalid credentials"] }));
+      return res.status(401).json(error({ errors: ['Invalid credentials'] }));
     }
 
     req.logIn(user, (err) => {
-      console.log("user", user);
       if (err) {
         return res.status(500).json(error());
       }
@@ -46,10 +43,10 @@ export const register = async (req, res) => {
 
   const missingParams = [];
   if (!email) {
-    missingParams.push({ email: "Email required" });
+    missingParams.push({ email: 'Email required' });
   }
   if (!password) {
-    missingParams.push({ password: "Password required" });
+    missingParams.push({ password: 'Password required' });
   }
 
   if (missingParams.length > 0) {
@@ -57,13 +54,9 @@ export const register = async (req, res) => {
   }
 
   const existingUser = await User.findOne({ email });
-  console.log("register -> existingUser", existingUser);
 
-  console.log("register -> missingParams", missingParams);
   if (existingUser) {
-    return res
-      .status(400)
-      .json(validation([{ email: "Email already registered" }]));
+    return res.status(400).json(validation([{ email: 'Email already registered' }]));
   }
   const userToCreate = new User({
     username: email,
@@ -72,10 +65,8 @@ export const register = async (req, res) => {
 
   User.register(userToCreate, password, (err) => {
     if (err) {
-      return res
-        .status(500)
-        .json(error({ errors: ["Account could not be created"] }));
+      return res.status(500).json(error({ errors: ['Account could not be created'] }));
     }
-    return res.status(201).json(success({ status: "CREATED" }));
+    return res.status(201).json(success({ status: 'CREATED' }));
   });
 };

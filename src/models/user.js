@@ -1,14 +1,14 @@
-import mongoose from "mongoose";
-import passportLocalMongoose from "passport-local-mongoose";
-import validator from "validator";
-import jwt from "jsonwebtoken";
-import config from "@src/config";
+import mongoose from 'mongoose';
+import passportLocalMongoose from 'passport-local-mongoose';
+import jwt from 'jsonwebtoken';
+import Joi from 'joi';
+import config from '@src/config';
 
 const userRoles = {
-  superAdmin: "superadmin",
-  admin: "admin",
-  supervisor: "supervisor",
-  user: "user",
+  superAdmin: 'superadmin',
+  admin: 'admin',
+  supervisor: 'supervisor',
+  user: 'user',
 };
 
 const UserSchema = mongoose.Schema(
@@ -25,6 +25,8 @@ const UserSchema = mongoose.Schema(
     },
     firstName: { type: String },
     lastName: { type: String },
+    city: { type: String },
+    country: { type: String },
     isPublic: { type: Boolean, default: false },
     imageUrl: { type: String },
     verificationToken: String,
@@ -38,34 +40,38 @@ const UserSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-UserSchema.virtual("isVerified").get(function () {
-  return !!(this.verified || this.passwordReset);
-});
+UserSchema.plugin(passportLocalMongoose);
 
-UserSchema.set("toJSON", {
+UserSchema.virtual('isVerified').get(() => !!(this.verified || this.passwordReset));
+
+UserSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
-  transform: function (doc, ret) {
-    // remove these props when object is serialized
+  transform: (doc, ret) => {
     delete ret._id;
     delete ret.salt;
     delete ret.hash;
   },
 });
 
-UserSchema.methods.generateVerificationToken = function () {
-  return jwt.sign({ id: this._id }, config.jwt.secret, {
+UserSchema.methods.generateVerificationToken = () =>
+  jwt.sign({ id: this._id }, config.jwt.secret, {
     expiresIn: config.jwt.expiryDays,
-    algorithm: "RS256",
+    algorithm: 'RS256',
   });
+
+const UserModel = mongoose.model('User', UserSchema);
+
+const DetailsSchema = Joi.object({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  city: Joi.string().required(),
+  country: Joi.string().required(),
+});
+
+const validateUserDetails = (user) => DetailsSchema.validate(user);
+
+export default {
+  UserModel,
+  validateUserDetails,
 };
-
-UserSchema.statics.checkExistingField = async (field, value) => {
-  const checkField = await User.findOne({ [`${field}`]: value });
-
-  return checkField;
-};
-
-UserSchema.plugin(passportLocalMongoose);
-
-export default mongoose.model("User", UserSchema);

@@ -1,8 +1,8 @@
-import express from "express";
+import express from 'express';
 // import initializeDb from "@src/data/db";
 
-import users from "@api/users/users.routes";
-import auth from "@api/auth/auth.routes";
+import users from '@api/users/users.routes';
+import auth from '@api/auth/auth.routes';
 
 const router = express();
 
@@ -11,8 +11,8 @@ const router = express();
 //     seedDB();
 //   }
 
-router.use("/users", users());
-router.use("/auth", auth());
+router.use('/users', users());
+router.use('/auth', auth());
 // });
 
 export default router;
