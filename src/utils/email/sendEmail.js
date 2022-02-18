@@ -1,8 +1,8 @@
-import sgMail from "@sendgrid/mail";
-import config from "@src/config";
+import sgMail from '@sendgrid/mail';
+import config from '@src/config';
 
 const { apiKey, verifiedAccount } = config.email;
-console.log("apiKey", apiKey);
+console.log('apiKey', apiKey);
 sgMail.setApiKey(apiKey);
 
 /**
@@ -19,7 +19,7 @@ sgMail.setApiKey(apiKey);
  */
 const sendEmail = async (mailData) => {
   if (!apiKey || !verifiedAccount) {
-    throw Error("config.email.missing");
+    throw Error('config.email.missing');
   }
   mailData.from = verifiedAccount;
   // mailData.from = { name: "Voluntier Team", email: verifiedAccount };

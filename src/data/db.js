@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import config from "@src/config";
+import mongoose from 'mongoose';
+import config from '@src/config';
 
 export default () => {
   mongoose.Promise = global.Promise;
@@ -9,11 +9,11 @@ export default () => {
   });
 
   const { connection } = mongoose;
-  connection.once("open", () => {
+  connection.once('open', () => {
     console.log(`MongoDB running at ${config.mongoUrl}`);
   });
 
-  connection.on("error", () => {
-    console.error("Error while connecting to DB");
+  connection.on('error', () => {
+    console.error('Error while connecting to DB');
   });
 };

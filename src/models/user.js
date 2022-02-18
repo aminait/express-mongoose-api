@@ -8,6 +8,7 @@ const userRoles = {
   superAdmin: 'superadmin',
   admin: 'admin',
   supervisor: 'supervisor',
+  orgAdmin: 'orgAdmin',
   user: 'user',
 };
 
@@ -22,6 +23,10 @@ const UserSchema = mongoose.Schema(
       type: String,
       enum: Object.values(userRoles),
       default: userRoles.user,
+    },
+    isVolunteer: {
+      type: Boolean,
+      default: true,
     },
     firstName: { type: String },
     lastName: { type: String },
@@ -39,16 +44,16 @@ const UserSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
-
 UserSchema.plugin(passportLocalMongoose);
 
-UserSchema.virtual('isVerified').get(() => !!(this.verified || this.passwordReset));
+// UserSchema.virtual('isVerified').get(() => !!(this.verified || this.passwordReset));
 
 UserSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform: (doc, ret) => {
     delete ret._id;
+    delete ret.id;
     delete ret.salt;
     delete ret.hash;
   },
@@ -60,8 +65,6 @@ UserSchema.methods.generateVerificationToken = () =>
     algorithm: 'RS256',
   });
 
-const UserModel = mongoose.model('User', UserSchema);
-
 const DetailsSchema = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
@@ -69,9 +72,6 @@ const DetailsSchema = Joi.object({
   country: Joi.string().required(),
 });
 
-const validateUserDetails = (user) => DetailsSchema.validate(user);
+export const validateUserDetails = (user) => DetailsSchema.validate(user);
 
-export default {
-  UserModel,
-  validateUserDetails,
-};
+export default mongoose.model('User', UserSchema);

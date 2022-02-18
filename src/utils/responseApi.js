@@ -1,4 +1,4 @@
-export function success({ data = null, messages = null, status = "OK" }) {
+export function success({ data = null, messages = null, status = 'OK' }) {
   return {
     status,
     errors: [],
@@ -7,7 +7,7 @@ export function success({ data = null, messages = null, status = "OK" }) {
   };
 }
 
-export function error({ errors = [], messages = null, status = "ERR" }) {
+export function error({ errors = [], messages = null, status = 'ERR' }) {
   return {
     status,
     errors,
@@ -18,7 +18,7 @@ export function error({ errors = [], messages = null, status = "ERR" }) {
 
 export function validation(messages) {
   return {
-    status: "INVALID_REQUEST",
+    status: 'INVALID_REQUEST',
     errors: [],
     messages,
     data: null,

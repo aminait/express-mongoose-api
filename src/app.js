@@ -52,6 +52,7 @@ const limiter = RateLimit({
 //   release: packageJson.version,
 // });
 const app = express();
+app.set('env', process.env.NODE_ENV || 'development');
 
 // TODO  sentry
 app.use(limiter);
@@ -98,7 +99,5 @@ app.get('/health', (req, res) => {
 
 // routes
 app.use('/api/v1', routes);
-
-app.set('env', process.env.NODE_ENV);
 
 export default app;
