@@ -1,5 +1,6 @@
 import { error } from '@src/utils/responseApi';
 
+// TODO expand permittedRole to permittedRoles array
 const hasRole =
   (permittedRole) =>
   // returns middleware

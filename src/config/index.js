@@ -25,4 +25,6 @@ export default {
     confirmUrl: `http://localhost:3000`,
   },
   mongoUrl: 'mongodb://127.0.0.1:27017/volunteer-db',
+  defaultImageUrl:
+    'https://www.nicepng.com/png/full/73-730154_open-default-profile-picture-png.png',
 };
