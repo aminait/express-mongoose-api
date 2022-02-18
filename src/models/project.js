@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Joi from 'joi';
-import projectStatus from './projectStatus';
+import ProjectStatus from './projectStatus';
 
 const { Schema } = mongoose;
 
@@ -40,8 +40,8 @@ const ProjectSchema = Schema(
     },
     status: {
       type: String,
-      enum: projectStatus,
-      default: projectStatus.draft,
+      enum: ProjectStatus,
+      default: ProjectStatus.draft,
     },
     city: {
       type: String,

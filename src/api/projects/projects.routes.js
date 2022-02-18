@@ -16,12 +16,12 @@ export default () => {
   const routes = Router();
 
   routes.get('/', [paginate(Project)], getAllProjects); // done
-  routes.get('/:id', getProjectById);
-  routes.put('/:id', updateProjectById);
-  routes.post('/:id/publish', publishProjectById);
-  routes.post('/:id/unpublish', unpublishProjectById);
-  routes.post('/:id/cancel', cancelProjectById);
-  routes.delete('/:id', deleteProjectById);
+  routes.get('/:id', getProjectById); // done
+  routes.put('/:id', updateProjectById); // done
+  routes.post('/:id/publish', publishProjectById); // done
+  routes.post('/:id/unpublish', unpublishProjectById); // done
+  routes.post('/:id/cancel', cancelProjectById); // done
+  routes.delete('/:id', deleteProjectById); // done
 
   return routes;
 };

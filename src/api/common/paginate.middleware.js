@@ -1,10 +1,16 @@
-const paginate = (model) => async (req, res, next) => {
-  console.log('paginate -> model', model);
+import mongoose from 'mongoose';
+// TODO add sortby
+const paginate = (model, findBy) => async (req, res, next) => {
   const page = parseInt(req.query.page, 10) || 1;
   const size = parseInt(req.query.size, 10) || 10;
 
   const startIndex = page === 1 ? 0 : (page - 1) * size;
-  const allItems = await model.find();
+
+  let query = {};
+  if (findBy) {
+    query = { [findBy]: mongoose.Types.ObjectId(req.params.id) };
+  }
+  const allItems = await model.find(query);
 
   try {
     if (allItems.length === 0) {
@@ -26,7 +32,7 @@ const paginate = (model) => async (req, res, next) => {
     };
 
     if (startIndex < allItems.length) {
-      const items = await model.find().limit(size).skip(startIndex);
+      const items = await model.find(query).limit(size).skip(startIndex);
       paginatedResult.items = items;
     } else {
       paginatedResult.items = [];

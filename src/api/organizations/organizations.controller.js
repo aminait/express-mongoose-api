@@ -74,7 +74,5 @@ export const createOrganizationProject = async (req, res) => {
 };
 
 export const getOrganizationProjects = async (req, res) => {
-  const { id } = req.params;
-  console.log('getOrganizationProjects -> id', id);
-  res.send({ message: 'getOrganizationProjects' });
+  res.json(success({ data: res.paginatedResult }));
 };
