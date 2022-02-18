@@ -3,14 +3,7 @@ import passportLocalMongoose from 'passport-local-mongoose';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import config from '@src/config';
-
-const userRoles = {
-  superAdmin: 'superadmin',
-  admin: 'admin',
-  supervisor: 'supervisor',
-  orgAdmin: 'orgAdmin',
-  user: 'user',
-};
+import UserRoles from './userRoles';
 
 const UserSchema = mongoose.Schema(
   {
@@ -21,8 +14,8 @@ const UserSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: Object.values(userRoles),
-      default: userRoles.user,
+      enum: Object.values(UserRoles),
+      default: UserRoles.User,
     },
     isVolunteer: {
       type: Boolean,
@@ -73,5 +66,4 @@ const DetailsSchema = Joi.object({
 });
 
 export const validateUserDetails = (user) => DetailsSchema.validate(user);
-
 export default mongoose.model('User', UserSchema);
