@@ -139,6 +139,12 @@ describe('Listing All Projects', () => {
   });
 });
 
+describe('Project CRUD', () => {
+  it('sanity check', () => {
+    expect(1).toBe(1);
+  });
+});
+
 /*
  * Image uploads
  */
