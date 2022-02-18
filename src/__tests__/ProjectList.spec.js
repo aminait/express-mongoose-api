@@ -1,3 +1,176 @@
+/* eslint-disable no-await-in-loop */
+import request from 'supertest';
+import mongoose from 'mongoose';
+import app from '@src/app';
+import User from '@models/user';
+import Organization from '@models/organization';
+import Project from '@models/project';
+import { beforeEach, expect } from '@jest/globals';
+
+beforeEach((done) => {
+  mongoose.connect(
+    'mongodb://localhost:27017/volunteer-db-test',
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => done()
+  );
+});
+
+afterEach((done) => {
+  mongoose.connection.db.dropDatabase(() => {
+    mongoose.connection.close(() => done());
+  });
+});
+// extract seed and add faker package
+describe('Listing All Projects', () => {
+  const addProjects = async (count) => {
+    for (let i = 0; i < count; i += 1) {
+      const projectIds = [];
+      // replace with register
+      const user = await User.create({
+        username: `user${i + 1}@email.com`,
+        email: `user${i + 1}@email.com`,
+        firstName: `fistName${i + 1}`,
+        lastName: `lastName${i + 1}`,
+      });
+      const organization = await Organization.create({
+        owner: user._id,
+        name: `organization-${i + 1}`,
+        city: `city-${i + 1}`,
+        country: `country-${i + 1}`,
+      });
+      const project = await Project.create({
+        organizer: organization._id,
+        name: `project-${i + 1}`,
+        summary: `summary-${i + 1}`,
+        catefory: `category-${i + 1}`,
+      });
+      projectIds.push(project._id);
+    }
+  };
+
+  const getProjects = (pageQuery = {}) => {
+    let endpoint = '';
+    if (pageQuery) {
+      const { page, size } = pageQuery;
+      endpoint = `/api/v1/projects?page=${page}&size=${size}`;
+    } else {
+      endpoint = '/api/v1/projects';
+    }
+    const agent = request(app).get(endpoint);
+    return agent;
+  };
+
+  it('sanity check', () => {
+    expect(1).toBe(1);
+  });
+
+  it('returns 200 when there are no projects in db', async () => {
+    const response = await getProjects();
+    expect(response.status).toBe(200);
+  });
+
+  /*
+   * Pagination
+   */
+
+  it('returns pagination object as response body', async () => {
+    const response = await getProjects();
+    expect(response.body).toEqual({
+      items: [],
+      pageInfo: {
+        totalItems: 0,
+        totalPages: 0,
+        page: 1,
+        size: 10,
+      },
+    });
+  });
+
+  it('returns 10 projects in items array when there are 11 projects in db', async () => {
+    await addProjects(11);
+    const response = await getProjects();
+    expect(response.body.items.length).toBe(10);
+    expect(response.body.pageInfo.totalItems).toBe(11);
+  });
+
+  it('returns 1 project in items array at page 2 when there are 11 projects in db', async () => {
+    await addProjects(11);
+    const pageQuery = {
+      page: 2,
+      size: 10,
+    };
+    const response = await getProjects(pageQuery);
+    expect(response.body.items.length).toBe(1);
+    expect(response.body.pageInfo.totalItems).toBe(11);
+  });
+
+  it('returns totalPages as 2 when there are 11 projects in db', async () => {
+    await addProjects(11);
+    const response = await getProjects();
+    expect(response.body.pageInfo.totalPages).toBe(2);
+  });
+
+  it('returns size as 10 when size is not specified', async () => {
+    await addProjects(11);
+    const response = await getProjects();
+    expect(response.body.pageInfo.size).toBe(2);
+  });
+
+  it('returns size as 5 when size is specified as 5', async () => {
+    await addProjects(11);
+    const pageQuery = {
+      page: 1,
+      size: 5,
+    };
+    const response = await getProjects(pageQuery);
+    expect(response.body.pageInfo.size).toBe(5);
+  });
+
+  it('returns page as 1 when page is null', async () => {
+    await addProjects(11);
+    const pageQuery = {
+      page: null,
+      size: 10,
+    };
+    const response = await getProjects(pageQuery);
+    expect(response.body.pageInfo.page).toBe(1);
+  });
+
+  it('returns items as empty array when page is greater than totalPages', async () => {
+    await addProjects(11);
+    const pageQuery = {
+      page: 3,
+      size: 10,
+    };
+    const response = await getProjects(pageQuery);
+    expect(response.body.items.length).toBe(0);
+  });
+});
+
+/*
+ * Image uploads
+ */
+
+/*
+ * Project List DTO
+ */
+
+describe('Filtering Projects', () => {
+  it('sanity check', () => {
+    expect(1).toBe(1);
+  });
+
+  /*
+   * Filter by
+   */
+});
+
+describe('Searching Projects', () => {
+  it('sanity check', () => {
+    expect(1).toBe(1);
+  });
+});
+
 // const request = require('supertest');
 // const app = require('../src/app');
 // const User = require('../src/user/User');
