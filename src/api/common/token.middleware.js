@@ -11,6 +11,7 @@ const authenticate = async (req, res, next) => {
     req.token = bearerToken;
 
     jwt.verify(bearerToken, config.jwt.secret, async (err, response) => {
+      // TODO handle case for expired token
       if (err) {
         return res.status(401).json(error({ status: 'UNAUTHORIZED' }));
       }
