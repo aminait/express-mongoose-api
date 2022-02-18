@@ -15,7 +15,7 @@ import paginate from '../common/paginate.middleware';
 export default () => {
   const routes = Router();
 
-  routes.get('/', [paginate(Project)], getAllProjects);
+  routes.get('/', [paginate(Project)], getAllProjects); // done
   routes.get('/:id', getProjectById);
   routes.put('/:id', updateProjectById);
   routes.post('/:id/publish', publishProjectById);

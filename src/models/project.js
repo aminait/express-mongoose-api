@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
+import Joi from 'joi';
 import projectStatus from './projectStatus';
 
 const { Schema } = mongoose;
 
 const ProjectSchema = Schema(
   {
-    organizer: { type: Schema.Types.ObjectId, ref: 'Organization' },
+    organization: { type: Schema.Types.ObjectId, ref: 'Organization' },
+    createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
     name: {
       type: String,
       required: true,
@@ -63,5 +65,27 @@ const ProjectSchema = Schema(
 );
 
 // ProjectSchema.method("calculatePrice", async () => {});
+
+// TODO add toJSON method
+
+// TODO check integer validation
+
+const CreateSchema = Joi.object({
+  createdBy: Joi.required(),
+  organization: Joi.required(),
+  name: Joi.string(),
+  summary: Joi.string(),
+  description: Joi.string(),
+  startTime: Joi.date(),
+  endTime: Joi.date(),
+  status: Joi.string(),
+  city: Joi.string(),
+  country: Joi.string(),
+  category: Joi.string().required(),
+  volunteersCount: Joi.number(),
+  capacity: Joi.number().integer(),
+}).options({ abortEarly: false });
+
+export const validateCreateProject = (org) => CreateSchema.validate(org);
 
 export default mongoose.model('Project', ProjectSchema);

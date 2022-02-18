@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 
 const OrganizationSchema = Schema({
   owner: { type: Schema.Types.ObjectId, ref: 'User' },
+  organizers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   name: { type: String, required: true },
   imageUrl: { type: String },
   city: { type: String },

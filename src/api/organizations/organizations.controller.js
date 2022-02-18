@@ -2,39 +2,46 @@ import User from '@models/user';
 import Role from '@models/userRoles';
 
 import Organization, { validateCreateOrg } from '@models/organization';
+import Project, { validateCreateProject } from '@models/project';
 
 import config from '@src/config';
+import getValidationMessages from '@src/utils/validationMessages';
 import { success, error, validation } from '@src/utils/responseApi';
 
 export const createOrganization = async (req, res) => {
-  const { name, imageUrl = config.defaultImageUrl, city, country } = req.body;
   const validate = validateCreateOrg(req.body);
   if (validate.error) {
-    const missingParams = [];
     const { details } = validate.error;
-    details.forEach((detail) => {
-      missingParams.push({ [detail.context.label]: detail.message });
-    });
-    return res.status(400).json(validation(missingParams));
+    const messages = await getValidationMessages(details);
+    return res.status(400).json(validation(messages));
   }
 
-  const { _id } = req.user;
+  const { name, imageUrl = config.defaultImageUrl, city, country } = req.body;
+  const { _id: userId } = req.user;
 
+  // TODO adding organizers is not tested
   const organization = await Organization.create({
-    owner: _id,
+    owner: userId,
     name,
     imageUrl,
     city,
     country,
+    organizers: [userId],
   });
 
   if (!organization) {
     return res.status(500).json(error());
   }
 
-  await User.findOneAndUpdate({ _id }, { isVolunteer: false, role: Role.OrgAdmin });
+  await User.findOneAndUpdate({ _id: userId }, { isVolunteer: false, role: Role.OrgAdmin });
 
   return res.status(201).json(success({ status: 'CREATED' }));
+};
+
+export const updateOrganizationById = async (req, res) => {
+  const { id } = req.params;
+  console.log('updateOrganizationById -> id', id);
+  res.send({ message: 'updateOrganizationById' });
 };
 
 export const deleteOrganizationById = async (req, res) => {
@@ -43,19 +50,31 @@ export const deleteOrganizationById = async (req, res) => {
   res.send({ message: 'deleteOrganizationById' });
 };
 
-export const updateOrganizationById = async (req, res) => {
+export const createOrganizationProject = async (req, res) => {
   const { id } = req.params;
-  console.log('updateOrganizationById -> id', id);
-  res.send({ message: 'updateOrganizationById' });
+
+  const createObj = req.body;
+  createObj.createdBy = req.user._id;
+  createObj.organization = id;
+
+  const validate = validateCreateProject(createObj);
+  if (validate.error) {
+    const { details } = validate.error;
+    const messages = await getValidationMessages(details);
+    return res.status(400).json(validation(messages));
+  }
+
+  // TODO handle recurring project
+
+  const project = await Project.create(createObj);
+  if (project) {
+    // TODO return json project
+    return res.status(201).json(success({ status: 'CREATED', data: project }));
+  }
 };
+
 export const getOrganizationProjects = async (req, res) => {
   const { id } = req.params;
   console.log('getOrganizationProjects -> id', id);
   res.send({ message: 'getOrganizationProjects' });
-};
-
-export const createOrganizationProject = async (req, res) => {
-  const { id } = req.params;
-  console.log('createOrganizationProject -> id', id);
-  res.send({ message: 'createOrganizationProject' });
 };
