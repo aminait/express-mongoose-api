@@ -27,6 +27,15 @@ const loginUser = (user = validUser, options = {}) => {
   return agent.send(user);
 };
 
+const logoutUser = (token, options = {}) => {
+  const agent = request(app).post('/api/v1/auth/logout');
+  if (options.language) {
+    agent.set('Accept-Language', options.language);
+  }
+  agent.set('Authorization', `Bearer ${token}`);
+  return agent.send();
+};
+
 beforeEach((done) => {
   mongoose.connect(
     'mongodb://localhost:27017/volunteer-db-test',
@@ -47,6 +56,23 @@ describe('User Login', () => {
     const response = await loginUser();
     expect(response.status).toBe(200);
     expect(Object.keys(response.body.data)[0]).toEqual('token');
+    expect(response.body.data).toEqual({ token: expect.any(String) });
+  });
+});
+
+describe('User Logout', () => {
+  it('returns 401 when request is not authenticated', async () => {
+    const response = await logoutUser();
+    expect(response.status).toBe(401);
+  });
+  it('returns isLoggedOut when user is logged in', async () => {
+    await registerUser();
+    const loginRes = await loginUser();
+    const { token } = loginRes.body.data;
+    const response = await logoutUser(token);
+    console.log('it -> response', response);
+    expect(response.status).toBe(200);
+    expect(response.body.data.isLoggedOut).toBeTruthy();
   });
 });
 

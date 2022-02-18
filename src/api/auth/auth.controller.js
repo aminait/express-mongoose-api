@@ -33,8 +33,14 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  req.logout();
-  const data = { isLoggedOut: true };
+  const data = { isLoggedOut: false };
+  console.log('logout -> req.user', req.user);
+  if (req.user) {
+    req.logout();
+    data.isLoggedOut = true;
+    req.user = null;
+    req.token = null;
+  }
   return res.json(success({ data }));
 };
 
