@@ -1,3 +1,9 @@
+import { success } from '@src/utils/responseApi';
+
+export const getAllProjects = async (req, res) => {
+  res.json(success({ data: res.paginatedResult }));
+};
+
 export const getProjectById = async (req, res) => {
   const { id } = req.params;
   console.log('getProjectById -> id', id);

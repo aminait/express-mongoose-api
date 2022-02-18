@@ -42,7 +42,7 @@ describe('Listing All Projects', () => {
         organizer: organization._id,
         name: `project-${i + 1}`,
         summary: `summary-${i + 1}`,
-        catefory: `category-${i + 1}`,
+        category: `category-${i + 1}`,
       });
       projectIds.push(project._id);
     }
@@ -51,6 +51,7 @@ describe('Listing All Projects', () => {
   const getProjects = (pageQuery = {}) => {
     let endpoint = '';
     if (pageQuery) {
+      console.log('getProjects -> pageQuery', pageQuery);
       const { page, size } = pageQuery;
       endpoint = `/api/v1/projects?page=${page}&size=${size}`;
     } else {
@@ -59,10 +60,6 @@ describe('Listing All Projects', () => {
     const agent = request(app).get(endpoint);
     return agent;
   };
-
-  it('sanity check', () => {
-    expect(1).toBe(1);
-  });
 
   it('returns 200 when there are no projects in db', async () => {
     const response = await getProjects();
@@ -75,22 +72,17 @@ describe('Listing All Projects', () => {
 
   it('returns pagination object as response body', async () => {
     const response = await getProjects();
-    expect(response.body).toEqual({
+    expect(response.body.data).toEqual({
       items: [],
-      pageInfo: {
-        totalItems: 0,
-        totalPages: 0,
-        page: 1,
-        size: 10,
-      },
+      pageInfo: {},
     });
   });
 
   it('returns 10 projects in items array when there are 11 projects in db', async () => {
     await addProjects(11);
     const response = await getProjects();
-    expect(response.body.items.length).toBe(10);
-    expect(response.body.pageInfo.totalItems).toBe(11);
+    expect(response.body.data.items.length).toBe(10);
+    expect(response.body.data.pageInfo.totalItems).toBe(11);
   });
 
   it('returns 1 project in items array at page 2 when there are 11 projects in db', async () => {
@@ -100,20 +92,20 @@ describe('Listing All Projects', () => {
       size: 10,
     };
     const response = await getProjects(pageQuery);
-    expect(response.body.items.length).toBe(1);
-    expect(response.body.pageInfo.totalItems).toBe(11);
+    expect(response.body.data.items.length).toBe(1);
+    expect(response.body.data.pageInfo.totalItems).toBe(11);
   });
 
   it('returns totalPages as 2 when there are 11 projects in db', async () => {
     await addProjects(11);
     const response = await getProjects();
-    expect(response.body.pageInfo.totalPages).toBe(2);
+    expect(response.body.data.pageInfo.totalPages).toBe(2);
   });
 
   it('returns size as 10 when size is not specified', async () => {
     await addProjects(11);
     const response = await getProjects();
-    expect(response.body.pageInfo.size).toBe(2);
+    expect(response.body.data.pageInfo.size).toBe(10);
   });
 
   it('returns size as 5 when size is specified as 5', async () => {
@@ -123,7 +115,7 @@ describe('Listing All Projects', () => {
       size: 5,
     };
     const response = await getProjects(pageQuery);
-    expect(response.body.pageInfo.size).toBe(5);
+    expect(response.body.data.pageInfo.size).toBe(5);
   });
 
   it('returns page as 1 when page is null', async () => {
@@ -133,7 +125,7 @@ describe('Listing All Projects', () => {
       size: 10,
     };
     const response = await getProjects(pageQuery);
-    expect(response.body.pageInfo.page).toBe(1);
+    expect(response.body.data.pageInfo.page).toBe(1);
   });
 
   it('returns items as empty array when page is greater than totalPages', async () => {
@@ -143,7 +135,7 @@ describe('Listing All Projects', () => {
       size: 10,
     };
     const response = await getProjects(pageQuery);
-    expect(response.body.items.length).toBe(0);
+    expect(response.body.data.items.length).toBe(0);
   });
 });
 

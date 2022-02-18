@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import Project from '@models/project';
 import {
+  getAllProjects,
   getProjectById,
   updateProjectById,
   publishProjectById,
@@ -8,9 +10,12 @@ import {
   deleteProjectById,
 } from './projects.controller';
 
+import paginate from '../common/paginate.middleware';
+
 export default () => {
   const routes = Router();
 
+  routes.get('/', [paginate(Project)], getAllProjects);
   routes.get('/:id', getProjectById);
   routes.put('/:id', updateProjectById);
   routes.post('/:id/publish', publishProjectById);
