@@ -1,21 +1,21 @@
-# Volunteer Scape
+# Express MongoDB API
 
-[WIP]
+### Features
 
-- [ ] Role Based Access Control
-- [ ] JWT Authentication
+- [x] Role Based Access Control
+- [x] JWT Authentication
 - [ ] Social Logins + Passport Strategies
 
-- [ ] Unit Tests with Jest
-- [ ] Global Error Handling
+- [x] Unit Tests with Jest
+- [x] Global Error Handling
 - [ ] Logger
 - [ ] Rate Limiting
 
-- [ ] Pagination Results
-- [ ] Localized Responses
+- [x] Pagination Results
+- [x] Localized Responses
 - [ ] Schema Validation
 
-- [ ] Environment Variables
+- [x] Environment Variables
 - [ ] Github Actions
 - [ ] Dockerized
 
@@ -26,9 +26,9 @@
 - [ ] Static Files
 
 - [ ] Prettier
-- [ ] Eslint
-- [ ] Husky
-- [ ] Babel
+- [x] Eslint
+- [x] Husky
+- [x] Babel
 
 - [ ] Postman Collection
 - [ ] Openapi Spec
